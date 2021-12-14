@@ -25,7 +25,7 @@ process vep {
         path cache
         val args
     output:
-        path '*.log'
+        path '*.out'
     """
     name=vep-arg-\$( echo ${args} | sed 's/-//g' | sed 's/ /-/g' )    
 
@@ -36,7 +36,7 @@ process vep {
          --cache \
          --dir_cache $cache \
          --fasta $fasta \
-         $args > \${name}-\${LSB_JOBID}.log 2>&1
+         $args > \${name}-\${LSB_JOBID}.out 2>&1
     """
 }
 
