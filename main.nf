@@ -35,6 +35,7 @@ process vep {
          --offline \
          --cache \
          --dir_cache $cache \
+         --assembly GRCh38 \
          --fasta $fasta \
          $args > \${name}-\${LSB_JOBID}.out 2>&1
     """
