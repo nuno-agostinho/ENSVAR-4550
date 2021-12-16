@@ -2,13 +2,14 @@
 // Benchmark VEP --everything arguments
 nextflow.enable.dsl=2
 
-params.repeat = 10 // times to repeat each run
-
-params.vep   = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
-params.cache = "/nfs/production/flicek/ensembl/variation/data/VEP"
-params.fasta = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
-params.vcf   = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenomes/NA12878.vcf.gz"
-params.flags = "vep-everything-flags.txt"
+params {
+    repeat = 10 // times to repeat each run
+    vep   = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
+    cache = "/nfs/production/flicek/ensembl/variation/data/VEP"
+    fasta = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+    vcf   = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenomes/NA12878.vcf.gz"
+    flags = "vep-everything-flags.txt"
+}
 
 // get flags turned on when setting --everything in VEP
 flags = Channel.fromPath( params.flags ).splitText( ).map{it -> it.trim()}
