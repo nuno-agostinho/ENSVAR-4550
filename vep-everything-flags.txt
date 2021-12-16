@@ -19,6 +19,6 @@
 --af_gnomad
 --max_af
 --pubmed
---var_synonyms
 --variant_class
 --mane
+--mirna
