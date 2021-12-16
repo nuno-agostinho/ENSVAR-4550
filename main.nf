@@ -42,9 +42,6 @@ process vep {
 }
 
 workflow {
-    // --everything flag
-    everything = Channel.from( "--everything" )
-
     // all flags (explicitly stated to check against --everything)
     allFlags = flags.reduce{ a, b -> return "$a $b" }
 
@@ -52,7 +49,10 @@ workflow {
     nonRegFlags = flags.filter{ it != "--regulatory" }
                        .reduce{ a, b -> return "$a $b" }
 
-    flagTests = flags.concat( allFlags, nonRegFlags, everything )
+    // --everything and no extra flags
+    otherFlags = Channel.from( "--everything", "" )
+
+    flagTests = flags.concat( allFlags, nonRegFlags, otherFlags )
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests )
 }
 
