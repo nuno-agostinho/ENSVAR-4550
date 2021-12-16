@@ -1,4 +1,5 @@
 work/
 reports/
 output/
+logs/
 .nextflow*
