@@ -55,7 +55,7 @@ workflow {
     // --everything and no extra flags
     otherFlags = Channel.from( "--everything", "" )
 
-    flagTests = flags.concat( allFlags, nonRegFlags, otherFlags )
+    flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
     loop = Channel.from(1..params.repeat)
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests, loop )
 }
