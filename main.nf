@@ -2,15 +2,18 @@
 // Benchmark VEP --everything arguments
 nextflow.enable.dsl=2
 
-params.repeat = 10 // times to repeat each run
-params.vep   = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
-params.cache = "/nfs/production/flicek/ensembl/variation/data/VEP"
-params.fasta = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
-params.vcf   = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenomes/NA12878.vcf.gz"
-params.flags = "vep-everything-flags.txt"
+params.repeat    = 10 // times to repeat each run
+params.vep       = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
+params.cache     = "/nfs/production/flicek/ensembl/variation/data/VEP"
+params.fasta     = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+params.vcf       = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenomes/NA12878.vcf.gz"
 
-// get flags turned on when setting --everything in VEP
-flags = Channel.fromPath( params.flags ).splitText( ).map{it -> it.trim()}
+// to pass flags in CLI, add a double-quote and a space in the string
+// e.g. nextflow run main.nf --flags "--regulatory "
+params.flags     = null 
+
+// params.flagsFile is ignored if params.flags is set
+params.flagsFile = "vep-everything-flags.txt"
 
 process vep {
     tag "$args $iter"
@@ -48,17 +51,25 @@ process vep {
 }
 
 workflow {
-    // all flags (explicitly stated to check against --everything)
-    allFlags = flags.reduce{ a, b -> return "$a $b" }
+    if ( params.flags ) {
+        flagTests = Channel.of( params.flags )
+    } else {
+        // get flags turned on when setting --everything in VEP
+        flags = Channel.fromPath( params.flags )
+                       .splitText()
+                       .map{it -> it.trim()}
 
-    // all flags without --regulatory
-    nonRegFlags = flags.filter{ it != "--regulatory" }
-                       .reduce{ a, b -> return "$a $b" }
+        // all flags (explicitly stated to check against --everything)
+        allFlags = flags.reduce{ a, b -> return "$a $b" }
 
-    // --everything and no extra flags
-    otherFlags = Channel.from( "--everything", "" )
+        // all flags without --regulatory
+        nonRegFlags = flags.filter{ it != "--regulatory" }
+                           .reduce{ a, b -> return "$a $b" }
 
-    flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
+        // no extra flags (baseline) and --everything
+        otherFlags = Channel.from( "--everything", "" )
+        flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
+    }
     loop = Channel.from(1..params.repeat)
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests, loop )
 }
