@@ -21,13 +21,19 @@ other flags
 Install [Nextflow](nextflow.io) and run:
 
 ```
-nextflow run main.nf
+bsub nextflow run main.nf
 ```
 
-Use the argument `--repeat` to change the number of runs of each test:
+To change the number of runs of each test:
 
 ```
-nextflow run main.nf --repeat 3
+bsub nextflow run main.nf --repeat 3
+```
+
+To override the tested flags:
+
+```
+bsub nextflow run main.nf --flags "--regulatory "
 ```
 
 ## Output
