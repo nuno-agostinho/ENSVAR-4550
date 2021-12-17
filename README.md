@@ -18,7 +18,7 @@ other flags
 
 ## How to run the script
 
-Install [Nextflow](nextflow.io) and run:
+Install [Nextflow](https://nextflow.io) and run:
 
 ```
 bsub nextflow run main.nf
