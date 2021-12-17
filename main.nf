@@ -21,7 +21,7 @@ process vep {
 
     memory '3 GB'
     executor 'lsf'
-    clusterOptions "-g ENSVAR-4550"
+    //clusterOptions "-g ENSVAR-4550"
 
     input:
         path vep
