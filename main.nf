@@ -55,7 +55,7 @@ workflow {
         flagTests = Channel.of( params.flags )
     } else {
         // get flags turned on when setting --everything in VEP
-        flags = Channel.fromPath( params.flags )
+        flags = Channel.fromPath( params.flagsFile )
                        .splitText()
                        .map{it -> it.trim()}
 
