@@ -28,9 +28,10 @@ process vep {
         val args
         each iter
     output:
-        path '*.out'
+        path '*.out' optional true
     """
-    name=vep-arg-\$( echo ${args} | sed 's/-//g' | sed 's/ /-/g' )    
+    name=vep-arg-\$( echo ${args} | sed 's/-//g' | sed 's/ /-/g' )
+    log=\${name}-\${LSB_JOBID}-${iter}.out
     perl ${vep} \
          --i $vcf \
          --o \${name}-\${LSB_JOBID}.txt \
@@ -39,7 +40,10 @@ process vep {
          --dir_cache $cache \
          --assembly GRCh38 \
          --fasta $fasta \
-         $args > \${name}-\${LSB_JOBID}-${iter}.out 2>&1
+         $args > \${log} 2>&1
+
+    # remove log file if empty
+    [ -s \${log} ] || rm \${log}
     """
 }
 
