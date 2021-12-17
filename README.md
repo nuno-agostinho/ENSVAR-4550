@@ -30,7 +30,9 @@ To change the number of runs of each test:
 bsub nextflow run main.nf --repeat 3
 ```
 
-To override the tested flags:
+To override the tested flags (notice that there needs to be a space for
+Nextflow to correctly interpret the parameter as a string and not as an
+argument for itself):
 
 ```
 bsub nextflow run main.nf --flags "--regulatory "
