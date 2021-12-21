@@ -13,7 +13,7 @@ params.vcf       = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenome
 params.flags     = null 
 
 // params.flagsFile is ignored if params.flags is set
-params.flagsFile = "vep-everything-flags.txt"
+params.flagsFile = "input/vep-everything-flags.txt"
 
 process vep {
     tag "$args $iter"
