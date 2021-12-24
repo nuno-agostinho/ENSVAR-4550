@@ -66,9 +66,9 @@ workflow {
         nonRegFlags = flags.filter{ it != "--regulatory" }
                            .reduce{ a, b -> return "$a $b" }
 
-        // no extra flags (baseline) and --everything
-        otherFlags = Channel.from( "--everything", "" )
-        flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
+        // VEP with no extra flags (baseline), --everything and --regulatory
+        otherFlags = Channel.from( "--everything", "", "--regulatory" )
+        flagTests = allFlags.concat( nonRegFlags, otherFlags )
     }
     loop = Channel.from(1..params.repeat)
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests, loop )
