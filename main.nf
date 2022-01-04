@@ -2,14 +2,15 @@
 // Benchmark VEP --everything arguments
 nextflow.enable.dsl=2
 
-params.repeat    = 10 // times to repeat each run
+params.repeat    = 5 // times to repeat each run
 params.vep       = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
 params.cache     = "/nfs/production/flicek/ensembl/variation/data/VEP"
 params.fasta     = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
 params.vcf       = "/nfs/production/flicek/ensembl/variation/data/PlatinumGenomes/NA12878.vcf.gz"
 
-// to pass flags in CLI, add a double-quote and a space in the string
-// e.g. nextflow run main.nf --flags "--regulatory "
+// to pass flags in CLI besides the ones used as baselin, use double quotes
+// and add a space somewhere inside the string
+//   e.g. nextflow run main.nf --flags "--regulatory "
 params.flags     = null 
 
 // params.flagsFile is ignored if params.flags is set
@@ -19,9 +20,12 @@ process vep {
     tag "$args $iter"
     publishDir 'logs'
 
+    cpus 96
+    time '6h'
     memory '3 GB'
+    queue 'short'
     executor 'lsf'
-    //clusterOptions "-g ENSVAR-4550"
+    // clusterOptions "-g ENSVAR-4550"
 
     input:
         path vep
@@ -66,9 +70,9 @@ workflow {
         nonRegFlags = flags.filter{ it != "--regulatory" }
                            .reduce{ a, b -> return "$a $b" }
 
-        // VEP with no extra flags (baseline), --everything and --regulatory
-        otherFlags = Channel.from( "--everything", "", "--regulatory" )
-        flagTests = allFlags.concat( nonRegFlags, otherFlags )
+        // VEP with no extra flags (baseline) and --everything
+        otherFlags = Channel.from( "--everything", "" )
+        flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
     }
     loop = Channel.from(1..params.repeat)
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests, loop )
