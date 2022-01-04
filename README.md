@@ -53,10 +53,15 @@ table that summarises the run info, including runtimes in column `realtime`
 (whereas column `duration` shows runtime plus queue waiting time).
 [Learn more...](https://www.nextflow.io/docs/latest/tracing.html#trace-report)
 
-Finally, the R script `trace-plot.R` receives a trace report filepath and saves
-the resulting plot of runtimes in the same folder of the input file (the output
-name is the name of the file followed by `-runtimes`):
+### Plot output
+
+To plot runtimes, run the R script `trace-plot.R` with a trace report filepath
+as input:
 
 ```bash
 ./trace-plot.R reports/trace.txt
 ```
+
+The resulting plot will be saved in the same folder of the input file and its
+filename will be the name of the input file followed by `-runtimes`. The script
+aborts if the output file already exists.
