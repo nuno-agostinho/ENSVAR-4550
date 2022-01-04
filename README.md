@@ -55,6 +55,13 @@ summarises the run info, including runtimes in column `realtime` (column
 
 ### Plot output
 
+Make sure to install the following R packages in either your system or your
+personal library via R:
+
+```R
+install.packages(c("magrittr", "data.table", "lubridate", "ggplot2", "scales"))
+```
+
 To plot runtimes, run the R script `trace-plot.R` with a trace report filepath
 as input:
 
