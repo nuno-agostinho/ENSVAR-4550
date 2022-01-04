@@ -47,10 +47,10 @@ Standard output and error logs (STDOUT and STDERR) are saved in folder `logs`.
 VEP output files are discarded given that we are only interested in
 benchmarking time.
 
-As defined in `nextflow.config`, multiple types of reports are saved into
-folder `reports`. The most important is the trace report (`trace*.txt`), a
-table that summarises the run info, including runtimes in column `realtime`
-(whereas column `duration` shows runtime plus queue waiting time).
+As defined in `nextflow.config`, multiple reports are saved in folder
+`reports`. The most important is the trace report (`trace*.txt`), a table that
+summarises the run info, including runtimes in column `realtime` (column
+`duration` shows runtime plus queue waiting time).
 [Learn more...](https://www.nextflow.io/docs/latest/tracing.html#trace-report)
 
 ### Plot output
