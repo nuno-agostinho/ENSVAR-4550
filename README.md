@@ -38,9 +38,6 @@ argument for itself):
 bsub nextflow run main.nf --flags "--regulatory "
 ```
 
-Note: `nextflow.config` may have been configured to run a max number of
-parallel tasks to run in the cluster using the option `executor.queueSize`.
-
 ## Output
 
 Standard output and error logs (STDOUT and STDERR) are saved in folder `logs`.
