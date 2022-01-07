@@ -20,12 +20,8 @@ process vep {
     tag "$args $iter"
     publishDir 'logs'
 
-    cpus 96
     time '6h'
     memory '3 GB'
-    queue 'short'
-    executor 'lsf'
-    // clusterOptions "-g ENSVAR-4550"
 
     input:
         path vep
