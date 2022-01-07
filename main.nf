@@ -2,7 +2,7 @@
 // Benchmark VEP --everything arguments
 nextflow.enable.dsl=2
 
-params.repeat    = 5 // times to repeat each run
+params.repeat    = 10 // times to repeat each run
 params.vep       = "/hps/software/users/ensembl/repositories/nuno/ensembl-vep/vep"
 params.cache     = "/nfs/production/flicek/ensembl/variation/data/VEP"
 params.fasta     = "/nfs/production/flicek/ensembl/variation/data/Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
