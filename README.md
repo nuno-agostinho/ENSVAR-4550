@@ -9,6 +9,13 @@ All the flags enabled when setting `--everything` were saved to
 
 The script will run the following test cases multiple times:
 1. VEP in offline mode, using cache and fasta (baseline)
+
+```bash
+vcf="NA12878.vcf.gz" # obtained according to https://github.com/Illumina/PlatinumGenomes
+fasta="Homo_sapiens.GRCh38.dna.toplevel.fa.gz"
+perl vep --i $vcf --offline --cache --dir_cache $cache --assembly GRCh38 --fasta $fasta
+```
+
 2. Condition 1 with `--everything`
 3. Condition 1 with all flags set by `--everything` (should run for the same
 time as previous condition)
