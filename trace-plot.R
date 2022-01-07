@@ -61,14 +61,31 @@ baseline <- paste(
   "--dir_cache /nfs/production/flicek/ensembl/variation/data/VEP\n--assembly",
   "GRCh38 --fasta Homo_sapiens.GRCh38.dna.toplevel.fa.gz")
 
+trace$class <- reorder(trace$class, trace$realtime, median)
+
+# Calculate median
+df     <- data.frame(class=trace$class)
+df$med <- sapply(split(trace$realtime, trace$class), median)
+
+n_fun <- function(x){
+  parse  <- function(i) make_datetime(sec=seconds(i))
+  pretty <- function(k) format(k, "%k:%M")
+  med    <- parse(median(x))
+  return(data.frame(y=med, yintercept=med,
+                    label=sprintf("%s\n\n\n", pretty(med))))
+}
+
 ggplot(trace, aes(realtime, class, fill=class, color=class)) +
   geom_violin(alpha=0.5) +
   geom_jitter(alpha=0.5) +
-  xlab("VEP runtime") +
+  stat_summary(fun.data=n_fun, geom="text", hjust=1.1) +
+  stat_summary(fun.data=n_fun, geom="vline", linetype="dashed") +
+  xlab("Time (hours)") +
   ylab("") +
   scale_y_discrete(labels = wrap_format(20)) +
-  scale_x_datetime(breaks=parse_date_time(1:15, "H"), date_labels = "%H:%M") +
-  labs(title="VEP run", caption=baseline) +
+  scale_x_datetime(breaks=make_datetime(0, min=seq(60, 60 * 10, 30)),
+                   date_labels = "%H:%M") +
+  labs(title="VEP run", subtitle="Median values indicated", caption=baseline) +
   theme_bw() +
   theme(legend.position = 'none')
 
@@ -78,7 +95,7 @@ outFile   <- paste0(traceFile, "-runtimes.png")
 # Ask to overwrite file, if it exists
 owMsg <- sprintf("File %s alreadys exists; aborting.", outFile)
 if (file.exists(outFile)) stop(owMsg) 
-ggsave(outFile)
+ggsave(outFile, width=8, height=5)
 cat(paste("Plot successfuly saved to:", outFile), fill=TRUE)
 
 # Plot VEP runtimes per node --------------------------------------------------
