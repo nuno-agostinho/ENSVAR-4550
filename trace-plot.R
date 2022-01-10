@@ -53,6 +53,7 @@ trace$class <- factor(trace$class)
 
 # Convert "realtime" column from string to time
 trace$realtime <- parse_date_time(trace$realtime, c("HMS", "HM"))
+trace$sep      <- trace$realtime < parse_date_time(3, "H")
 
 # Plot VEP runtimes -----------------------------------------------------------
 
@@ -85,7 +86,8 @@ ggplot(trace, aes(realtime, class, fill=class, color=class)) +
   scale_y_discrete(labels = wrap_format(20)) +
   scale_x_datetime(breaks=make_datetime(0, min=seq(60, 60 * 10, 30)),
                    date_labels = "%H:%M") +
-  labs(title="VEP run", subtitle="Median values indicated", caption=baseline) +
+  labs(title="VEP runs",
+       subtitle="Median values presented over 10 runs", caption=baseline) +
   theme_bw() +
   theme(legend.position = 'none')
 
