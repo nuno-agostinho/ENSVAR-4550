@@ -50,25 +50,43 @@ process vep {
     """
 }
 
+def joinFlags (f) {
+    f.reduce{ a, b -> return "$a $b" }
+}
+
+def discardFlags (allFlags, discarded) {
+    joinFlags(allFlags.filter{ !(it in discarded) })
+}
+
 workflow {
     if ( params.flags ) {
         flagTests = Channel.of( params.flags )
     } else {
-        // get flags turned on when setting --everything in VEP
+        // get a list of flags set with --everything in VEP
         flags = Channel.fromPath( params.flagsFile )
                        .splitText()
                        .map{it -> it.trim()}
 
-        // all flags (explicitly stated to check against --everything)
-        allFlags = flags.reduce{ a, b -> return "$a $b" }
+        // all flags explicitly stated (same runtime as --everything)
+        allFlags = joinFlags(flags)
 
-        // all flags without --regulatory
-        nonRegFlags = flags.filter{ it != "--regulatory" }
-                           .reduce{ a, b -> return "$a $b" }
+        // discard specific flags
+        noReg    = discardFlags(flags, ["--regulatory"])
+        noHGVS   = discardFlags(flags, ["--hgvs"])
+        noPubMed = discardFlags(flags, ["--pubmed"])
+        noAF     = discardFlags(flags, ["--af"])
+        noAF1kg  = discardFlags(flags, ["--af_1kg"])
 
-        // VEP with no extra flags (baseline) and --everything
-        otherFlags = Channel.from( "--everything", "" )
-        flagTests = allFlags.concat( nonRegFlags, otherFlags, flags )
+        // join + discard allele frequency (AF) flags
+        afList = ["--af", "--af_1kg", "--af_esp", "--af_gnomad", "--max_af"]
+        noAnyAF = discardFlags(flags, afList)
+        afFlags = joinFlags( Channel.from(afList) )
+
+        // VEP with no extra flags (baseline), --everything and AF flags
+        otherFlags = Channel.from( "--everything", "", afFlags )
+
+        flagTests = allFlags.concat( otherFlags, noReg, noHGVS, noPubMed, noAF, noAF1kg, noAnyAF, flags )
+        flagTests.view()
     }
     loop = Channel.from(1..params.repeat)
     vep( params.vep, params.vcf, params.fasta, params.cache, flagTests, loop )

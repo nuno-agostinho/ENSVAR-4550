@@ -9,12 +9,15 @@ All the flags enabled when setting `--everything` were saved to
 
 The script will run the following test cases multiple times:
 1. VEP in offline mode, using cache and fasta (baseline)
-2. Condition 1 with `--everything`
-3. Condition 1 with all flags set by `--everything` (should run for the same
-time as previous condition)
-4. Condition 3 except for `--regulatory`
-5. Condition 1 with each of the flags enabled individually to test times of
-other flags
+2. Baseline with each of the flags enabled individually to test times of other
+flags
+3. Baseline with all allele frequency (AF) flags at the same time:
+`--af --af_1kg --af_esp --af_gnomad --max_af`
+4. Baseline with `--everything`
+5. Baseline with all flags set by `--everything` (should run for the same time
+as previous condition)
+6. Previous condition except for each of the following flags were not used:
+`--regulatory`, `--hgvs`, `--pubmed`, `--af`, `--af_1kg` and all AF flags
 
 ## How to run the script
 
