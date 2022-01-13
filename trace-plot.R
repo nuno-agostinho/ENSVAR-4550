@@ -78,7 +78,8 @@ n_fun <- function(x){
 
 tab <- table(trace$class)
 subtitle <- sprintf("Median values presented over %s%s runs", min(tab),
-                    ifelse(max(tab) > min(tab), paste0(" up to ", max(tab))))
+                    ifelse(max(tab) > min(tab),
+                           paste0(" up to ", max(tab)), ""))
 
 ggplot(trace, aes(realtime, class, fill=class, color=class)) +
   geom_violin(alpha=0.5) +
