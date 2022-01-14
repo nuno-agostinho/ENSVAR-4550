@@ -1,11 +1,11 @@
-# ENSVAR-4550: benchmark impact of --regulatory on VEP annotation speed
+# ENSVAR-4550: benchmark impact of --everything arguments
 
 This project benchmarks VEP when using the [`--everything`][everything] flag,
-a shortcut that enables multiple VEP flags:
-[everything]: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
+a shortcut that enables multiple VEP flags. All the flags enabled when setting
+`--everything` were saved to [`input/vep-everything-flags.txt`][flagsFile].
 
-All the flags enabled when setting `--everything` were saved to
-[`input/vep-everything-flags.txt`](input/vep-everything-flags.txt).
+[everything]: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
+[flagsFile]: input/vep-everything-flags.txt
 
 The script will run the following test cases multiple times:
 1. VEP in offline mode, using cache and fasta (baseline)
