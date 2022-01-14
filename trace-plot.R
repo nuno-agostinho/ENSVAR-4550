@@ -62,6 +62,9 @@ baseline <- paste(
   "GRCh38 --fasta Homo_sapiens.GRCh38.dna.toplevel.fa.gz")
 
 trace$class <- reorder(trace$class, trace$realtime, median)
+trace$everything <- ifelse(grepl("--everything", trace$class),
+                           "Based on --everything",
+                           "Based on baseline")
 
 # Calculate median
 n_fun <- function(x){
@@ -87,6 +90,7 @@ ggplot(trace, aes(realtime, class, fill=class, color=class)) +
   xlab("Time (hours)") +
   ylab("") +
   # scale_y_discrete(labels = wrap_format(20)) +
+  facet_grid(rows = vars(everything), scales="free", space="free") +
   scale_x_datetime(breaks=make_datetime(0, min=seq(60, 60 * 10, 30)),
                    date_labels = "%H:%M") +
   labs(title="VEP runtimes", subtitle=subtitle, caption=baseline) +
