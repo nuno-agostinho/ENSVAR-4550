@@ -68,12 +68,12 @@ trace$everything <- ifelse(grepl("--everything", trace$class),
 
 # Calculate median
 n_fun <- function(x){
-  todate <- function(i) make_datetime(sec=seconds(i + 600))
+  todate <- function(i) make_datetime(sec=seconds(i))
   med    <- todate(median(x))
-  maxi   <- todate(max(x))
+  pos    <- todate(max(x + 600)) # position labels at max + 10 minutes
   
   pretty <- function(k) format(k, "%k:%M")
-  return(data.frame(y=maxi, yintercept=med,
+  return(data.frame(y=pos, yintercept=med,
                     label=sprintf("%s", pretty(med))))
 }
 
