@@ -1,11 +1,11 @@
 # ENSVAR-4550: benchmark impact of --regulatory on VEP annotation speed
 
-This project benchmarks VEP when using the `--everything` flag, a shortcut that
-enables multiple VEP flags:
-https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
+This project benchmarks VEP when using the [`--everything`][everything] flag,
+a shortcut that enables multiple VEP flags:
+[everything]: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
 
 All the flags enabled when setting `--everything` were saved to
-`vep-everything-flags.txt`.
+[`input/vep-everything-flags.txt`](input/vep-everything-flags.txt).
 
 The script will run the following test cases multiple times:
 1. VEP in offline mode, using cache and fasta (baseline)
@@ -25,6 +25,10 @@ flags
 as previous condition)
 6. Previous condition except for each of the following flags were not used:
 `--regulatory`, `--hgvs`, `--pubmed`, `--af`, `--af_1kg` and all AF flags
+
+Note: if running in a cluster, each run should reserve a single node to ensure
+stable runtimes. This can be done by asking all cores of a single node, for
+instance.
 
 ## How to run the script
 
