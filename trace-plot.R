@@ -24,17 +24,15 @@ if (!file.exists(traceFile)) {
 }
 
 # Plot run times in violin plots -----------------------------------------------
-trace <- traceFile %>%
-  lapply(fread) %>%
-  rbindlist()
+trace <- fread(traceFile)
 
 # Get all --everything flags to rename cols
 allFlags <- readLines("input/vep-everything-flags.txt") %>%
-  Filter(f=nchar)
+  Filter(f=nchar) # remove empty lines
 
 trace$class <- gsub("vep \\((.*) [0-9]*\\)", "\\1", trace$name)
 trace$sep <- gsub(" --", ";;;--", trace$class) %>%
-  sapply(strsplit, ";;;")
+  sapply(strsplit, ";;;") # correctly split each argument
 
 # Rename classes
 trace$class[trace$class == ""] <- "baseline*"
@@ -43,7 +41,7 @@ len <- sapply(trace$sep, length)
 
 missingFlags <- lapply(trace$sep, setdiff, x=allFlags) %>%
   sapply(paste, collapse=" ")
-missingMsg <- "All --eveything flags minus %s"
+missingMsg <- "All --everything flags minus %s"
 condition  <- len > 10
 trace$class[condition] <- sprintf(missingMsg, missingFlags)[condition]
 
@@ -91,7 +89,7 @@ ggplot(trace, aes(realtime, class, fill=class, color=class)) +
   # scale_y_discrete(labels = wrap_format(20)) +
   scale_x_datetime(breaks=make_datetime(0, min=seq(60, 60 * 10, 30)),
                    date_labels = "%H:%M") +
-  labs(title="VEP runs", subtitle=subtitle, caption=baseline) +
+  labs(title="VEP runtimes", subtitle=subtitle, caption=baseline) +
   theme_bw() +
   theme(legend.position = 'none')
 
