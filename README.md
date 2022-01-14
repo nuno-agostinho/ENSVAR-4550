@@ -7,7 +7,7 @@ a shortcut that enables multiple VEP flags. All the flags enabled when setting
 [everything]: https://www.ensembl.org/info/docs/tools/vep/script/vep_options.html#opt_everything
 [flagsFile]: input/vep-everything-flags.txt
 
-The script will run the following test cases multiple times:
+The script will run the following test cases 10 times (by default):
 1. VEP in offline mode, using cache and fasta (baseline)
 
 ```bash
